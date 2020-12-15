@@ -19,3 +19,6 @@ https://localhost:44329/fort/DeleteCities/?EmailId=(EmailID)&&PassWord=(PassWord
 4.RetriveCities:
 
 https://localhost:44329/fort/RetrieveCities/?EmailId=(EmailID)&&PassWord=(PassWord)
+
+1.I have implemented MongoDB database so pls download MongoDB.I already added Robo3T.
+2.I had added new files for retreving MongoDB database data from MVC .net application as per the task.so pls chk it.
