@@ -62,7 +62,24 @@ namespace FortCode.Data
                 return await _context.Fort
                                 .Find(fort => fort.Email == EmailId && fort.Password == Password)
                                 .FirstOrDefaultAsync();
-              
+
+            }
+            catch (Exception ex)
+            {
+                // log or manage the exception
+                throw ex;
+            }
+        }
+        public async Task<UserLocation> GetCities(string EmailId, string City, string Country)
+        {
+            try
+            {
+
+                return await _context.UserLocation
+                                .Find(UserLocation => UserLocation.Email == EmailId && UserLocation.City == City &&
+                                UserLocation.Country == Country)
+                                .FirstOrDefaultAsync();
+
             }
             catch (Exception ex)
             {
@@ -84,7 +101,7 @@ namespace FortCode.Data
                 throw ex;
             }
         }
-       
+
         public virtual async Task<Fort> UpdateOneAsync(Fort item, bool updateDate = true)
         {
             try
@@ -115,7 +132,7 @@ namespace FortCode.Data
             }
         }
 
-        public virtual async Task<UserLocation>InsertUserLocation(UserLocation item, bool updateDate = true)
+        public virtual async Task<UserLocation> InsertUserLocation(UserLocation item, bool updateDate = true)
         {
             try
             {
@@ -145,5 +162,30 @@ namespace FortCode.Data
             }
         }
 
+        public async Task<bool> DeleteUserLocation(string id)
+        {
+            try
+            {
+                DeleteResult actionResult = await _context.UserLocation.DeleteOneAsync(
+                    Builders<UserLocation>.Filter.Eq("Id", id));
+
+                return actionResult.IsAcknowledged
+                    && actionResult.DeletedCount > 0;
+
+                //var delete = await _context.UserLocation.DeleteOneAsync(x => x.Id == id);
+
+                //if (delete != null)
+                //    return true;
+                //else
+                //    return false;
+
+
+            }
+            catch (Exception ex)
+            {
+                // log or manage the exception
+                throw ex;
+            }
+        }
     }
 }

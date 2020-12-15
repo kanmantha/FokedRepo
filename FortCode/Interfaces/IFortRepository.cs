@@ -14,5 +14,8 @@ namespace FortCode.Interfaces
 
         Task<UserLocation> InsertUserLocation(UserLocation item, bool updateDate = true);
         Task<IEnumerable<UserLocation>> GetAllCities(string EmailId);
+
+        Task<bool> DeleteUserLocation(string id);
+        Task<UserLocation> GetCities(string EmailId, string City, string Country);
     }
 }

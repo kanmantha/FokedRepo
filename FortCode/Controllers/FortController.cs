@@ -51,7 +51,7 @@ namespace FortCode.Controllers
                     fort.Name = Name;
                     fort.Email = EmailId;
                     fort.Password = Password;
-                   
+
 
                     var UserResponse = await _fortRepository.UpdateOneAsync(fort, true);
                     if (UserResponse != null)
@@ -84,26 +84,34 @@ namespace FortCode.Controllers
         }
 
         [HttpGet]
-        public async Task<ResponseMessage> AddCityCountry(string EmailId, String Password,string City,string Country)
+        public async Task<ResponseMessage> AddCityCountry(string EmailId, String Password, string City, string Country)
         {
             if ((EmailId != null || EmailId != "") && (Password != null || Password != "") && (City != null || City != "")
                 && (Country != null || Country != ""))
             {
-                var validateUser =  _fortRepository.ValidateUser(EmailId, Password).Result;
+                var validateUser = _fortRepository.ValidateUser(EmailId, Password).Result;
+                var cities = City.Split(',');
+
+
                 if (validateUser != null)
                 {
-                    UserLocation userLocation = new UserLocation();
-                    userLocation.Email = validateUser.Email;
-                    userLocation.City = City;
-                    userLocation.Country = Country;
-                    var UserResponse = await _fortRepository.InsertUserLocation(userLocation, true);
+                    foreach (var city in cities)
+                    {
+                        UserLocation userLocation = new UserLocation();
+                        userLocation.Email = validateUser.Email;
+                        userLocation.City = city;
+                        userLocation.Country = Country;
+                        var UserResponse = await _fortRepository.InsertUserLocation(userLocation, true);
 
-                    if(UserResponse != null)
+                        //if (UserResponse != null)
+                        //    return new ResponseMessage { Status = "Ok", Message = "Updated Successfully" };
+                        //else
+                        //    return new ResponseMessage { Status = "Ok", Message = "Error in Updation" };
+                    }
+
                     return new ResponseMessage { Status = "Ok", Message = "Updated Successfully" };
-                    else
-                        return new ResponseMessage { Status = "Ok", Message = "Error in Updation" };
                 }
-                    
+
                 else
                     return new ResponseMessage { Status = "Ok", Message = "InValidUser" };
             }
@@ -114,12 +122,12 @@ namespace FortCode.Controllers
             }
         }
 
-         [HttpGet]
+        [HttpGet]
         public async Task<ResponseMessage> RetrieveCities(string EmailId, String Password)
         {
-            if ((EmailId != null || EmailId != "") && (Password != null || Password != "") )
+            if ((EmailId != null || EmailId != "") && (Password != null || Password != ""))
             {
-                var validateUser =  _fortRepository.ValidateUser(EmailId, Password).Result;
+                var validateUser = _fortRepository.ValidateUser(EmailId, Password).Result;
                 if (validateUser != null)
                 {
                     var Cities = await _fortRepository.GetAllCities(validateUser.Email);
@@ -127,11 +135,11 @@ namespace FortCode.Controllers
                     Parallel.ForEach(Cities, (city) =>
                     {
                         CityList.Add(city.City);
-                    }); 
-                    
+                    });
+
                     return new ResponseMessage { Status = "Ok", Data = CityList };
                 }
-                    
+
                 else
                     return new ResponseMessage { Status = "Ok", Message = "InValidUser" };
             }
@@ -142,6 +150,35 @@ namespace FortCode.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<ResponseMessage> DeleteCities(string EmailId, String Password, string City, string Country)
+        {
+            if ((EmailId != null || EmailId != "") && (Password != null || Password != ""))
+            {
+                var validateUser = _fortRepository.ValidateUser(EmailId, Password).Result;
+                if (validateUser != null)
+                {
+                    var GetExistingCity = await _fortRepository.GetCities(EmailId, City, Country);
 
+                    if (GetExistingCity != null)
+                    {
+                        await _fortRepository.DeleteUserLocation(GetExistingCity.Id);
+                        return new ResponseMessage { Status = "Ok", Data = "Deleted Successfully" };
+                    }
+                    else
+                        return new ResponseMessage { Status = "Ok", Data = "No Record Found" };
+
+
+                }
+
+                else
+                    return new ResponseMessage { Status = "Ok", Message = "InValidUser" };
+            }
+            else
+
+            {
+                return new ResponseMessage { Status = "Note", Message = "Please Fill Email And Password." };
+            }
+        }
     }
 }
