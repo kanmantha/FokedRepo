@@ -1,3 +1,10 @@
+NOTE:
+1.Hi as i haven't got an opportunity to work on docker so i had implemented MongoDB as my backend because its open source.
+2.Actually we can store in MongoDB as Json foramt.
+3.I have implemented MongoDB database, so pls download MongoDB.I already added Robo3T in the link.
+4.I had added new files for retreving MongoDB database data from MVC .net application as per the task.so pls chk it.
+
+
 API's For Create,authenticate,add cities,remove Cities,retrieve cities
 
 1.A user should be able to create an account.
@@ -20,5 +27,3 @@ https://localhost:44329/fort/DeleteCities/?EmailId=(EmailID)&&PassWord=(PassWord
 
 https://localhost:44329/fort/RetrieveCities/?EmailId=(EmailID)&&PassWord=(PassWord)
 
-1.I have implemented MongoDB database so pls download MongoDB.I already added Robo3T.
-2.I had added new files for retreving MongoDB database data from MVC .net application as per the task.so pls chk it.
